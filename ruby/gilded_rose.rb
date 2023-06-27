@@ -10,17 +10,11 @@ class GildedRose
   def update_quality()
     @items.each do |item|
       next if item.name == SULFURAS
-      if item.name == AGED_BRIE
-        specialized_item = AgedBrieItem.new(item)
-        specialized_item.update_quality
-        next
-      end
-      if item.name == BACKSTAGE_PASSES
-        specialized_item = BackstagePassesItem.new(item)
-        specialized_item.update_quality
-        next
-      end
-      specialized_item = RegularItem.new(item)
+      class_name = "RegularItem"
+      class_name = "AgedBrieItem" if item.name == AGED_BRIE
+      class_name = "BackstagePassesItem" if item.name == BACKSTAGE_PASSES
+      
+      specialized_item = Object.const_get(class_name).new(item)
       specialized_item.update_quality
     end
   end
