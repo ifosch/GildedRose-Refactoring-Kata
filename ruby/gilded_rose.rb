@@ -13,7 +13,7 @@ class GildedRose
       class_name = "RegularItem"
       class_name = "AgedBrieItem" if item.name == AGED_BRIE
       class_name = "BackstagePassesItem" if item.name == BACKSTAGE_PASSES
-      
+
       specialized_item = Object.const_get(class_name).new(item)
       specialized_item.update_quality
     end
@@ -27,16 +27,14 @@ class RegularItem
     @item = item
   end
 
+  def decrease_quality()
+    item.quality -= 1 if item.quality > 0
+  end
+
   def update_quality()
-    if @item.quality > 0
-      @item.quality = @item.quality - 1
-    end
-    @item.sell_in = @item.sell_in - 1
-    if @item.sell_in < 0
-      if @item.quality > 0
-        @item.quality = @item.quality - 1
-      end
-    end
+    item.sell_in -= 1
+    decrease_quality
+    decrease_quality if item.sell_in < 0
   end
 end
 
