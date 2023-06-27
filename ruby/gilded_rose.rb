@@ -65,16 +65,14 @@ class AgedBrieItem
     @item = item
   end
 
+  def increase_quality()
+    item.quality += 1 if item.quality < 50
+  end
+
   def update_quality()
-    if item.quality < 50
-      item.quality = item.quality + 1
-    end
-    item.sell_in = item.sell_in - 1
-    if item.sell_in < 0
-      if item.quality < 50
-        item.quality = item.quality + 1
-      end
-    end
+    item.sell_in -= 1
+    increase_quality
+    increase_quality if item.sell_in < 0
   end
 end
 
