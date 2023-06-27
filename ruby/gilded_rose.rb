@@ -2,6 +2,7 @@ class GildedRose
   AGED_BRIE = "Aged Brie"
   BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert"
   SULFURAS = "Sulfuras, Hand of Ragnaros"
+  CONJURED = "Conjured Mana Cake"
 
   def initialize(items)
     @items = items
@@ -13,10 +14,29 @@ class GildedRose
       class_name = "RegularItem"
       class_name = "AgedBrieItem" if item.name == AGED_BRIE
       class_name = "BackstagePassesItem" if item.name == BACKSTAGE_PASSES
+      class_name = "ConjuredItem" if item.name == CONJURED
 
       specialized_item = Object.const_get(class_name).new(item)
       specialized_item.update_quality
     end
+  end
+end
+
+class ConjuredItem
+  attr_accessor :item
+
+  def initialize(item)
+    @item = item
+  end
+
+  def decrease_quality()
+    item.quality -= 2 if item.quality > 0
+  end
+
+  def update_quality()
+    item.sell_in -= 1
+    decrease_quality
+    decrease_quality if item.sell_in < 0
   end
 end
 
