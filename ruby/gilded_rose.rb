@@ -18,19 +18,28 @@ class GildedRose
         update_backstage_passes(item)
         next
       end
-      update_regular(item)
+      specialized_item = RegularItem.new(item)
+      specialized_item.update_quality
     end
   end
 end
 
-def update_regular(item)
-  if item.quality > 0
-    item.quality = item.quality - 1
+class RegularItem
+  attr_accessor :item
+
+  def initialize(item)
+    @item = item
   end
-  item.sell_in = item.sell_in - 1
-  if item.sell_in < 0
-    if item.quality > 0
-      item.quality = item.quality - 1
+
+  def update_quality()
+    if @item.quality > 0
+      @item.quality = @item.quality - 1
+    end
+    @item.sell_in = @item.sell_in - 1
+    if @item.sell_in < 0
+      if @item.quality > 0
+        @item.quality = @item.quality - 1
+      end
     end
   end
 end
