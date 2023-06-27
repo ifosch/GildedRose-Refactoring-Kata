@@ -15,7 +15,8 @@ class GildedRose
         next
       end
       if item.name == BACKSTAGE_PASSES
-        update_backstage_passes(item)
+        specialized_item = BackstagePassesItem.new(item)
+        specialized_item.update_quality
         next
       end
       specialized_item = RegularItem.new(item)
@@ -44,23 +45,32 @@ class RegularItem
   end
 end
 
-def update_backstage_passes(item)
-  if item.quality < 50
-    item.quality = item.quality + 1
-    if item.sell_in < 11
-      if item.quality < 50
-        item.quality = item.quality + 1
-      end
-    end
-    if item.sell_in < 6
-      if item.quality < 50
-        item.quality = item.quality + 1
-      end
-    end
+
+class BackstagePassesItem
+  attr_accessor :item
+
+  def initialize(item)
+    @item = item
   end
-  item.sell_in = item.sell_in - 1
-  if item.sell_in < 0
-    item.quality = item.quality - item.quality
+
+  def update_quality()
+    if item.quality < 50
+      item.quality = item.quality + 1
+      if item.sell_in < 11
+        if item.quality < 50
+          item.quality = item.quality + 1
+        end
+      end
+      if item.sell_in < 6
+        if item.quality < 50
+          item.quality = item.quality + 1
+        end
+      end
+    end
+    item.sell_in = item.sell_in - 1
+    if item.sell_in < 0
+      item.quality = item.quality - item.quality
+    end
   end
 end
 
